@@ -1,0 +1,15 @@
+jobs:
+- job: job_validate
+  displayName: Validate
+  steps:
+  - template: ../steps/az_login.yaml
+  - bash: |
+      az deployment group validate \
+        --name $(Build.BuildNumber) \
+        --resource-group $(resourceGroup) \
+        --template-file $(templateFile) \
+        --parameters $(parametersFile) \
+        --parameters virtual_machine_base64_encoded_script="$(cat $(scriptFile) | gzip -9 | base64 -w0)" \
+        --parameters environment=$(environment)
+    name: step_validate_bicep_template
+    displayName: Validate Bicep Template

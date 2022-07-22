@@ -1,0 +1,20 @@
+jobs:
+- job: job_analyze_psrrule_rules_azure
+  displayName: Analyze PSRule.Rules.Azure
+  steps:
+  - template: ../steps/az_login.yaml
+  - task: ps-rule-install@2
+    name: step_install_psrrule_rules_azure
+    displayName: Install PSRule.Rules.Azure
+    inputs:
+      module: PSRule.Rules.Azure  # Install PSRule.Rules.Azure from the PowerShell Gallery.
+      latest: false
+      prerelease: false
+  - task: ps-rule-assert@2
+    name: assert
+    displayName: Assert PSRule.Rules.Azure
+    inputs:
+      modules: PSRule.Rules.Azure   # Analyze objects using the rules within the PSRule.Rules.Azure PowerShell module.
+      inputType: repository
+      inputPath: 'templates/*.bicep'
+

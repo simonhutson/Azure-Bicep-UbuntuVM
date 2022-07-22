@@ -1,0 +1,16 @@
+jobs:
+- job: job_what_if
+  displayName: What If
+  steps:
+  - template: ../steps/az_login.yaml
+  - bash: |
+      az deployment group what-if \
+        --name $(Build.BuildNumber) \
+        --resource-group $(resourceGroup) \
+        --template-file $(templateFile) \
+        --parameters $(parametersFile) \
+        --parameters virtual_machine_base64_encoded_script="$(cat $(scriptFile) | gzip -9 | base64 -w0)" \
+        --parameters environment=$(environment) \
+        --exclude-change-types NoChange Ignore
+    name: step_what_if_bicep_template
+    displayName: What-If Bicep Template

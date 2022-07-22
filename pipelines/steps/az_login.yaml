@@ -1,0 +1,29 @@
+steps:
+- task: AzureKeyVault@2
+  inputs:
+    azureSubscription: 'SRH-Azure-Bicep-UbuntuVM-Key-Vault (Simon Hutson Internal Subscription)'
+    KeyVaultName: 'Azure-Bicep-UbuntuVM'
+    SecretsFilter: '*'
+    RunAsPreJob: false
+  name: step_key_vault_secrets
+  displayName: Key Vault Secrets
+- ${{ if eq(variables.isMain, 'True') }}:
+  - bash: |
+      az login \
+      --service-principal \
+      --username $(prodServicePrincipalClientId) \
+      --password $(prodServicePrincipalSecret) \
+      --tenant $(prodServicePrincipalTenantId)
+      az account set --subscription $(prodServicePrincipalSubscriptionId)
+    name: step_login_prod
+    displayName: Login Prod
+- ${{ else }}:
+  - bash: |
+      az login \
+      --service-principal \
+      --username $(devServicePrincipalClientId) \
+      --password $(devServicePrincipalSecret) \
+      --tenant $(devServicePrincipalTenantId)
+      az account set --subscription $(devServicePrincipalSubscriptionId)
+    name: step_login_dev
+    displayName: Login Dev

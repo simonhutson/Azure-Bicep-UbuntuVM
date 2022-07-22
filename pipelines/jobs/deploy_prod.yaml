@@ -1,0 +1,20 @@
+jobs:
+- deployment: job_deploy_prod
+  displayName: Deploy Prod
+  environment: Azure-Bicep-UbuntuVM
+  strategy:
+    runOnce:
+      deploy:
+        steps:
+        - checkout: self
+        - template: ../steps/az_login.yaml
+        - bash: |
+              az deployment group create \
+                --name $(Build.BuildNumber) \
+                --resource-group $(resourceGroup) \
+                --template-file $(templateFile) \
+                --parameters $(parametersFile) \
+                --parameters virtual_machine_base64_encoded_script="$(cat $(scriptFile) | gzip -9 | base64 -w0)" \
+                --parameters environment=$(environment)
+          name: step_deploy_bicep_template
+          displayName: Deploy Bicep Template

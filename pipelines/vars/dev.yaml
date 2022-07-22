@@ -1,0 +1,6 @@
+variables:
+
+# Dev variables
+  environment: dev
+  location: westeurope
+  resourceGroup: SRH-RG-01-TEST

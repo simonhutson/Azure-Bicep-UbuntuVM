@@ -1,0 +1,11 @@
+jobs:
+- job: job_create_resource_group
+  displayName: Create Resource Group
+  steps:
+  - template: ../steps/az_login.yaml
+  - bash: |
+      if [ $(az group exists --name $(resourceGroup)) = false ]; then
+        az group create --name $(resourceGroup) --location $(location)
+      fi
+    name: step_create_reource_group
+    displayName: Create Resource Group

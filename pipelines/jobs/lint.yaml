@@ -1,0 +1,9 @@
+jobs: 
+- job: job_lint
+  displayName: Lint
+  steps:
+  - template: ../steps/debug_vars.yaml
+  - bash: |
+      az bicep build --file $(templateFile)
+    name: step_lint_bicep_template
+    displayName: Lint Bicep Template

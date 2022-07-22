@@ -1,0 +1,6 @@
+variables:
+
+# Prod variables
+  environment: prod
+  location: westeurope
+  resourceGroup: SRH-RG-01

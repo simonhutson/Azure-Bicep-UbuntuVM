@@ -1,0 +1,16 @@
+steps:
+- bash: |
+    echo "templateFile:             $(templateFile)"
+    echo "parametersFile:           $(parametersFile)"
+    echo "scriptFile:               $(scriptFile)"
+    echo "environment:              $(environment)"
+    echo "location:                 $(location)"
+    echo "resourceGroup:            $(resourceGroup)"
+    echo "isMain:                   $(isMain)"
+    echo "isFork:                   $(isFork)"
+    echo "isPR:                     $(isPR)"
+    echo "isScheduled:              $(isScheduled)"
+    echo "isManual:                 $(isManual)"
+    echo "deployMain:               $(deployMain)"
+  name: step_debug_vars
+  displayName: Debug Vars

@@ -1,0 +1,87 @@
+name: $(Build.DefinitionName)-$(Date:yyyyMMdd)$(Rev:.r)
+
+trigger: none
+
+pool:
+  vmImage: ubuntu-latest
+
+variables:
+- template: vars/global.yaml
+  
+stages:
+
+- stage: stage_lint
+  displayName: Lint
+  variables:
+  - ${{ if eq(variables.isMain, 'True') }}:
+    - template: vars/prod.yaml
+  - ${{ else }}:
+    - template: vars/dev.yaml
+  jobs:
+  - template: jobs/lint.yaml
+
+- stage: stage_create_rg
+  displayName: Resource Group
+  variables:
+  - ${{ if eq(variables.isMain, 'True') }}:
+    - template: vars/prod.yaml
+  - ${{ else }}:
+    - template: vars/dev.yaml
+  jobs:
+  - template: jobs/create_rg.yaml
+
+- stage: stage_validate
+  displayName: Validate
+  variables:
+  - ${{ if eq(variables.isMain, 'True') }}:
+    - template: vars/prod.yaml
+  - ${{ else }}:
+    - template: vars/dev.yaml
+  jobs:
+  - template: jobs/validate.yaml
+
+# - stage: stage_psrule
+#   displayName: PSRule
+#   variables:
+#   - ${{ if eq(variables.isMain, 'True') }}:
+#     - template: vars/prod.yaml
+#   - ${{ else }}:
+#     - template: vars/dev.yaml
+#   jobs:
+#   - template: jobs/psrule.yaml
+
+- stage: stage_what_if
+  displayName: What If
+  variables:
+  - ${{ if eq(variables.isMain, 'True') }}:
+    - template: vars/prod.yaml
+  - ${{ else }}:
+    - template: vars/dev.yaml
+  jobs:
+  - template: jobs/what_if.yaml
+
+- stage: stage_deploy_dev
+  displayName: Deploy Dev
+  condition: and(succeeded(), eq(variables.isMain, 'False'))
+  variables:
+  - template: vars/dev.yaml
+  jobs:
+  - template: jobs/deploy_dev.yaml
+
+- stage: stage_delete_dev
+  displayName: Delete Dev
+  condition: eq(variables.isMain, 'False')
+  variables:
+  - template: vars/dev.yaml
+  jobs:
+  - template: jobs/delete_rg.yaml
+
+- stage: stage_deploy_prod
+  displayName: Deploy Prod
+  condition: eq(variables.deployMain, 'True')
+  dependsOn: stage_what_if
+  variables:
+  - template: vars/prod.yaml
+  jobs:
+  - template: jobs/deploy_prod.yaml
+

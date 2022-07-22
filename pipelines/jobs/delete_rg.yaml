@@ -1,0 +1,11 @@
+jobs:
+- job: job_delete_resource_group
+  displayName: Delete Resource Group
+  steps:
+  - template: ../steps/az_login.yaml
+  - bash: |
+      if [ $(az group exists --name $(resourceGroup)) = true ]; then
+        az group delete --name $(resourceGroup) --yes
+      fi
+    name: step_delete_reource_group
+    displayName: Delete Resource Group

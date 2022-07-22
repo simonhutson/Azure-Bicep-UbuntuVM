@@ -1,0 +1,14 @@
+variables:
+
+# Location of Bicep template files
+  templateFile: templates/main.bicep
+  parametersFile: templates/main.parameters.json
+  scriptFile: templates/install_apache.sh
+
+# Pipeline conditions
+  isMain:       ${{ eq(variables['Build.SourceBranch'], 'refs/heads/main') }}
+  isFork:       ${{ eq(variables['System.PullRequest.IsFork'], 'True') }}
+  isPR:         ${{ eq(variables['Build.Reason'], 'PullRequest') }}
+  isScheduled:  ${{ eq(variables['Build.Reason'], 'Schedule') }}
+  isManual:     ${{ eq(variables['Build.Reason'], 'Manual') }}
+  deployMain:   ${{ and( eq(variables.isMain,'True'), eq(variables.isFork, 'False'), eq(variables.isManual,'True') ) }}
