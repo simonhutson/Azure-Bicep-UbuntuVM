@@ -1,0 +1,61 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "metadata": {
+        "template": "./main.bicep"
+    },
+    "parameters": {
+        "environment": {
+            "value": "prod"
+        },
+        "virtual_machine_authentication_type": {
+            "value": "password"
+        },
+        "virtual_machine_admin_username": {
+            "value": "srh"
+        },
+        "virtual_machine_password_or_ssh_key": {
+            "value": "Pass@W0rd2022"
+        },
+        "virtual_machine_size": {
+            "value": "Standard_B2ms"
+        },
+        "virtual_machine_base64_encoded_script": {
+            "value": "H4sIAAAAAAACA1NW1E/KzNNPSizOAABpWODrCwAAAA=="
+        },
+        "virtual_network_address_prefixes": {
+            "value": [
+                "10.0.0.0/16"
+            ]
+        },
+        "virtual_network_subnets": {
+            "value": [
+                {
+                    "name": "GatewaySubnet",
+                    "subnetPrefix": "10.0.0.0/24",
+                    "isNSG": false
+                },
+                {
+                    "name": "AzureFirewallSubnet",
+                    "subnetPrefix": "10.0.1.0/24",
+                    "isNSG": false
+                },
+                {
+                    "name": "AzureFirewallManagementSubnet",
+                    "subnetPrefix": "10.0.2.0/24",
+                    "isNSG": false
+                },
+                {
+                    "name": "AzureBastionSubnet",
+                    "subnetPrefix": "10.0.3.0/24",
+                    "isNSG": false
+                },
+                {
+                    "name": "VM",
+                    "subnetPrefix": "10.0.4.0/24",
+                    "isNSG": true
+                }
+            ]        
+        }
+    }
+}
