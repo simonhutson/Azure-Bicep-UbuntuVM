@@ -1,0 +1,24 @@
+input:
+  pathIgnore:
+  - 'pipelines/'
+
+configuration:
+  AZURE_BICEP_FILE_EXPANSION: true
+  AZURE_PARAMETER_FILE_EXPANSION: true
+  AZURE_BICEP_FILE_EXPANSION_TIMEOUT: 15
+  AZURE_RESOURCE_GROUP:
+    name: SRH-RG-01-TEST
+    location: westeurope
+    tags: { }
+    properties:
+      provisioningState: 'Succeeded'
+  AZURE_SUBSCRIPTION:
+    subscriptionId: '25d7b58f-a2ed-4c46-a3f7-1748a5e0934b'
+    displayName: 'Simon Hutson Internal Subscription'
+    state: 'Active'
+  AZURE_TENANT:
+    countryCode: 'UK'
+    tenantId: '72f988bf-86f1-41af-91ab-2d7cd011db47'
+    displayName: 'microsoft.onmicrosoft.com'
+  AZURE_PARAMETER_DEFAULTS:
+    environment: 'dev'
